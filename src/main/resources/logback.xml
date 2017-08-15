@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <!--<appender>是<configuration>的子节点，是负责写日志的组件。
+    ConsoleAppender:把日志添加到控制台 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoding>UTF-8</encoding>
         <encoder>
@@ -10,6 +13,7 @@
         </filter>
     </appender>
 
+    <!--RollingFileAppender:滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件-->
     <appender name="mmall" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!--<File>d:/mmalllog/mmall.log</File>-->
         <File>I:\Tomcat-8.5\apache-tomcat-8.5.8-windows-x64\apache-tomcat-8.5.8\logs\mmall.log</File>
@@ -43,6 +47,13 @@
         </filter>
     </appender>
 
+    <!--用来设置某一个包或者具体的某一个类的日志打印级别、以及指定<appender>
+    name:用来指定受此loger约束的某一个包或者具体的某一个类。
+    level:用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，还有一个特俗值INHERITED或者同义词NULL，代表强制执行上级的级别。
+          如果未设置此属性，那么当前loger将会继承上级的级别。
+    addtivity:是否向上级loger传递打印信息。默认是true。
+    <loger>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。
+    -->
     <logger name="com.mmall" additivity="false" level="INFO" >
         <appender-ref ref="mmall" />
         <appender-ref ref="console"/>
@@ -70,6 +81,8 @@
     <!--</logger>-->
 
 
+    <!--也是<loger>元素，但是它是根loger。只有一个level属性，应为已经被命名为"root".
+    可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger-->
     <root level="DEBUG">
         <appender-ref ref="console"/>
         <appender-ref ref="error"/>

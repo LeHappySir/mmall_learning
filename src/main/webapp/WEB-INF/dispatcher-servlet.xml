@@ -8,10 +8,15 @@
 	http://www.springframework.org/schema/mvc
 	http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+    <!--springMVC配置文件 默认文件名为dispatcher-servlet.xml 也可以到web.xml对文件名进行修改
+    在servlet节点下增加一个init-param节点 令param-name节点的contextConfigLocation的paramValue指定文件位置和文件名 -->
+
+    <!--注解扫描-->
     <context:component-scan base-package="com.mmall" annotation-config="true"/>
 
     <mvc:annotation-driven>
         <mvc:message-converters>
+            <!--编码配置-->
             <bean class="org.springframework.http.converter.StringHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
@@ -20,6 +25,7 @@
                     </list>
                 </property>
             </bean>
+            <!--springMVC进行自动反序列化时用到的配置类 下面为json配置类-->
             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>

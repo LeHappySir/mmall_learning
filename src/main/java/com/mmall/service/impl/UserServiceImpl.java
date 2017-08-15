@@ -1,10 +1,12 @@
-package com.mmall.service;
+package com.mmall.service.impl;
 
 import com.mmall.common.Const;
+import com.mmall.common.ResponseCode;
 import com.mmall.common.ServerResponse;
 import com.mmall.common.TokenCache;
 import com.mmall.dao.UserMapper;
 import com.mmall.pojo.User;
+import com.mmall.service.IUserService;
 import com.mmall.util.MD5Util;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,7 +145,7 @@ public class UserServiceImpl implements IUserService {
         user.setPassword(MD5Util.MD5EncodeUtf8(passwordNew));
         resultCount = userMapper.updateByPrimaryKeySelective(user);
         if (resultCount>0){
-            ServerResponse.createBySuccessMessage("密码更新成功");
+            return ServerResponse.createBySuccessMessage("密码更新成功");
         }
         return ServerResponse.createByErrorMessage("密码更新失败");
     }
@@ -178,6 +180,22 @@ public class UserServiceImpl implements IUserService {
         }
         user.setPassword(StringUtils.EMPTY);
         return ServerResponse.createBySuccess(user);
+    }
+
+    //backend
+
+    /**
+     * 验证是否是管理员
+     * @param user
+     * @return
+     */
+    @Override
+    public ServerResponse checkAdminRole(User user){
+        if (user!=null&&user.getRole().intValue()== Const.Role.ROLE_ADMIN){
+            return ServerResponse.createBySuccess();
+        }else{
+            return ServerResponse.createByError();
+        }
     }
 
 }

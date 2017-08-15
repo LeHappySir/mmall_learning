@@ -6,6 +6,7 @@
 
     <display-name>Archetype Created Web Application</display-name>
 
+    <!--过滤器 转码-->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -24,28 +25,29 @@
     </filter-mapping>
 
 
+    <!--监听器 web容器启动和关闭的监听器 只负责web启动和关闭的事件-->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
 
+    <!--监听器 将web容器和spring容器进行整合-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:applicationContext.xml
+            classpath:applicationContext.xml<!--spring配置文件 ContextLoaderListener通过此配置文件将spring容器和web容器进行整合-->
         </param-value>
     </context-param>
 
+    <!--springMVC配置-->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
-
-
+    <!--只要是*.do都会被SpringMVC拦截-->
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.do</url-pattern>

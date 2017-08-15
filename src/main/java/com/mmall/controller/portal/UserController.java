@@ -168,7 +168,7 @@ public class UserController {
     }
 
     /**
-     * 等到用户信息
+     * 得到用户信息
      * @param session
      * @return
      */

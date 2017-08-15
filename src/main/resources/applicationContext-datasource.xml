@@ -9,8 +9,10 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <!--注解扫描-->
     <context:component-scan base-package="com.mmall" annotation-config="true"/>
 
+    <!--配置spring容器 将常量进行分离，配置到datasource.properties文件中，引用其中的key将value填充-->
     <bean id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="order" value="2"/>
@@ -23,7 +25,7 @@
         <property name="fileEncoding" value="utf-8"/>
     </bean>
 
-
+    <!--数据库配置 jdbc连接池配置-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${db.driverClassName}"/>
         <property name="url" value="${db.url}"/>
@@ -57,8 +59,11 @@
         <property name="validationQuery" value="SELECT 1 FROM dual"/>
     </bean>
 
+    <!--配置sqlSessionFactory-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--配置dataSource jdbc连接池配置-->
         <property name="dataSource" ref="dataSource"/>
+       <!--配置Mapper.xml所在位置-->
         <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"></property>
 
         <!-- 分页插件 -->
@@ -76,6 +81,7 @@
 
     </bean>
 
+    <!--mybatis扫描dao层接口-->
     <bean name="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.mmall.dao"/>
     </bean>
@@ -85,6 +91,7 @@
     <!-- 事务管理 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+        <!--提交失败是否回滚-->
         <property name="rollbackOnCommitFailure" value="true"/>
     </bean>
 
