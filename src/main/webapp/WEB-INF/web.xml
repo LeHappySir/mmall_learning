@@ -6,7 +6,7 @@
 
     <display-name>Archetype Created Web Application</display-name>
 
-    <!--过滤器 转码-->
+    <!--过滤器 转码 实现了javax.servlet.Filter接口-->
     <filter>
         <filter-name>characterEncodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
@@ -15,7 +15,7 @@
             <param-value>UTF-8</param-value>
         </init-param>
         <init-param>
-            <param-name>forceEncoding</param-name>
+            <param-name>forceEncoding</param-name><!--无论客户端请求是否包含编码，都使用过滤器里的编码解析请求，即上面设置的UTF-8-->
             <param-value>true</param-value>
         </init-param>
     </filter>
@@ -25,7 +25,7 @@
     </filter-mapping>
 
 
-    <!--监听器 web容器启动和关闭的监听器 只负责web启动和关闭的事件-->
+    <!--监听器 web容器启动和关闭的监听器 只负责web启动和关闭的事件 实现了javax.servlet.ServletContextListener接口-->
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
@@ -34,6 +34,8 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <!--节点作用:声明应用范围(整个WEB项目)内的上下文初始化参数 转化为键值对,并交给ServletContext即上面配置的ContextLoaderListener类-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
@@ -42,6 +44,7 @@
     </context-param>
 
     <!--springMVC配置-->
+    <!--容器的Context对象对请求路径(URL)做出处理，去掉请求URL的上下文路径后，按路径映射规则和Servlet映射路径（<url- pattern>）做匹配，如果匹配成功，则调用这个Servlet处理请求。-->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -53,5 +56,7 @@
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
 
+
+    <!--可知容器对于web.xml的加载过程是context-param >> listener  >> fileter  >> servlet-->
 </web-app>
 
