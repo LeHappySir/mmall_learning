@@ -34,6 +34,13 @@ public class CartServiceImpl implements ICartService {
     @Autowired
     private ProductMapper productMapper;
 
+    /**
+     * 添加商品到购物车,默认已勾选
+     * @param userId 用户ID
+     * @param productId 商品ID
+     * @param count 商品数量
+     * @return 返回已对购物车做了处理的数据CartVo对象
+     */
     @Override
     public ServerResponse<CartVo> add(Integer userId,Integer productId,Integer count){
         if (productId == null || count == null){
@@ -55,6 +62,14 @@ public class CartServiceImpl implements ICartService {
         return this.list(userId);
     }
 
+    /**
+     * 更新购物车中的某条数据,
+     * 重新设置购买商品的数量
+     * @param userId 用户ID
+     * @param productId 商品ID
+     * @param count 商品数量
+     * @return 返回已对购物车做了处理的数据CartVo对象
+     */
     @Override
     public ServerResponse<CartVo> update(Integer userId,Integer productId,Integer count){
         if (productId==null || count == null){
@@ -68,6 +83,12 @@ public class CartServiceImpl implements ICartService {
         return this.list(userId);
     }
 
+    /**
+     * 删除购物车中的商品
+     * @param userId 用户ID
+     * @param productIds 商品ID集合
+     * @return 返回已对购物车做了处理的数据CartVo对象
+     */
     @Override
     public ServerResponse<CartVo> deleteProducts(Integer userId,String productIds){
         List<String> productIdList = Splitter.on(",").splitToList(productIds);
@@ -78,18 +99,35 @@ public class CartServiceImpl implements ICartService {
         return this.list(userId);
     }
 
+    /**
+     * 得到购物车数据集合
+     * @param userId
+     * @return 返回已对购物车做了处理的数据CartVo对象
+     */
     @Override
     public ServerResponse<CartVo> list(Integer userId){
         CartVo cartVo = this.getCartVoLimit(userId);
         return ServerResponse.createBySuccess(cartVo);
     }
 
+    /**
+     * 改变勾选状态,全选、全反选、单选、取消单选
+     * @param userId
+     * @param productId
+     * @param checked
+     * @return
+     */
     @Override
     public ServerResponse<CartVo> selectOrUnSelect(Integer userId,Integer productId,Integer checked){
         cartMapper.checkedOrUnCheckedProduct(userId,productId,checked);
         return this.list(userId);
     }
 
+    /**
+     * 得到用户添加商品到购物车的个数
+     * @param userId
+     * @return
+     */
     @Override
     public ServerResponse<Integer> getCartProductCount(Integer userId){
         if (userId==null){
@@ -101,7 +139,10 @@ public class CartServiceImpl implements ICartService {
 
 
     /**
-     *
+     *根据用户搜索出购物车列表的数据,每一条数据对应一个CartProductVo对象
+     * 每一个CartProductVo对象都存在有商品信息和此商品购买的数量,若购买的数量超过商品的库存,
+     * 则需要更此数据的购买数量,若此商品在购物车中已勾选则需要计算入CartVo对象的总价中,最后得出
+     * 此用户在购物车的商品是否全选了
      * @param userId
      * @return
      */
@@ -156,6 +197,11 @@ public class CartServiceImpl implements ICartService {
         return cartVo;
     }
 
+    /**
+     * 判断是否全勾选
+     * @param userId
+     * @return
+     */
     private boolean getAllCheckedStatus(Integer userId){
         if(userId == null){
             return false;

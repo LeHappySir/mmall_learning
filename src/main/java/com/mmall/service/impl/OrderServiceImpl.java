@@ -66,8 +66,13 @@ public class OrderServiceImpl implements IOrderService {
     private ShippingMapper shippingMapper;
 
 
-
-
+    /**
+     * 前台得到订单列表
+     * @param userId 用户ID
+     * @param pageNum 页码
+     * @param pageSize 页容量
+     * @return 分页信息
+     */
     @Override
     public ServerResponse<PageInfo> getOrderList(Integer userId,Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
@@ -78,6 +83,14 @@ public class OrderServiceImpl implements IOrderService {
         return ServerResponse.createBySuccess(pageResult);
     }
 
+    /**
+     * 组装OrderVo集合
+     * 每一条订单包含订单内容集合,即购买商品的信息OrderItem对象
+     * OrderVo对象又此订单和此订单内容即OrderItem组成
+     * @param orderList
+     * @param userId
+     * @return
+     */
     private List<OrderVo> assembleOrderVoList(List<Order> orderList,Integer userId){
         List<OrderVo> orderVoList = Lists.newArrayList();
         for (Order order : orderList){
@@ -93,6 +106,12 @@ public class OrderServiceImpl implements IOrderService {
         return orderVoList;
     }
 
+    /**
+     * 得到订单的详情
+     * @param userId 用户ID
+     * @param orderNo 订单号
+     * @return
+     */
     public ServerResponse<OrderVo> getOrderDetail(Integer userId,long orderNo){
         Order order = orderMapper.selectByUserIdOrderNo(userId,orderNo);
         if (order==null){
@@ -103,6 +122,11 @@ public class OrderServiceImpl implements IOrderService {
         return ServerResponse.createBySuccess(orderVo);
     }
 
+    /**
+     *
+     * @param userId
+     * @return
+     */
     @Override
     public ServerResponse getOrderCartProduct(Integer userId){
         OrderProductVo orderProductVo = new OrderProductVo();
