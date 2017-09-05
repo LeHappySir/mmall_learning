@@ -183,9 +183,8 @@ public class OrderServiceImpl implements IOrderService {
 
     /**
      * 创建订单
-     *
-     * @param userId
-     * @param shippingId
+     * @param userId 用户ID
+     * @param shippingId 地址
      * @return
      */
     @Override
@@ -379,10 +378,10 @@ public class OrderServiceImpl implements IOrderService {
 
 
     /**
-     * 订单下订,接通支付宝
-     * @param userId
-     * @param orderNo
-     * @param path
+     * 订单支付,接通支付宝
+     * @param userId 用户ID
+     * @param orderNo 订单号
+     * @param path 文件路径,存储二维码时需要用到
      * @return
      */
     @Override
@@ -471,7 +470,7 @@ public class OrderServiceImpl implements IOrderService {
         //判断订单生成的状态
         switch (result.getTradeStatus()) {
             case SUCCESS:
-                log.info("支付宝预下单成功: )");
+                log.info("支付宝预下单成功: ");
                 AlipayTradePrecreateResponse response = result.getResponse();
                 dumpResponse(response);
                 //创建文件夹
@@ -523,6 +522,12 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
+    /**
+     * 支付宝回调函数
+     * 验证支付宝支付成功时的回调状态,若支付成功修改订单的支付状态和添加支付信息
+     * @param params
+     * @return
+     */
     @Override
     public ServerResponse alipayCallback(Map<String,String> params){
         Long orderNo = Long.parseLong(params.get("out_trade_no"));
@@ -555,6 +560,13 @@ public class OrderServiceImpl implements IOrderService {
     }
 
 
+    /**
+     * 订单是否已支付
+     * 若已支付则返回成功
+     * @param userId
+     * @param orderNo
+     * @return
+     */
     @Override
     public ServerResponse queryOrderPayStatus(Integer userId,Long orderNo){
 
