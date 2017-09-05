@@ -20,6 +20,11 @@ public class ProductController {
     @Autowired
     private IProductService iProductService;
 
+    /**
+     * 前台得到商品详情
+     * @param productId
+     * @return
+     */
     @RequestMapping("detail.do")
     @ResponseBody
     public ServerResponse<ProductDetailVo> detail(Integer productId){
@@ -27,6 +32,15 @@ public class ProductController {
     }
 
 
+    /**
+     * 前台得到商品列表
+     * @param keyWord 关键字
+     * @param categoryId 品类ID
+     * @param pageNum   页码
+     * @param pageSize  页容量
+     * @param orderBy   排序
+     * @return
+     */
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse<PageInfo> list(@RequestParam(value = "keyWord",required = false) String keyWord,

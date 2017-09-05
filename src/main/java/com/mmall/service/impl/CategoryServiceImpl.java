@@ -27,6 +27,14 @@ public class CategoryServiceImpl implements ICategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
 
+    /**
+     *增加品类
+     * 设置品类名称和父级ID,并设置状态为可用
+     * 插入品类信息
+     * @param categoryName 品类名称
+     * @param parentId     品类所属父级ID,默认为最顶级
+     * @return
+     */
     @Override
     public ServerResponse addCategory(String categoryName,Integer parentId){
         if (parentId==null||StringUtils.isBlank(categoryName)){
@@ -43,6 +51,13 @@ public class CategoryServiceImpl implements ICategoryService {
         return ServerResponse.createByErrorMessage("添加品类失败");
     }
 
+    /**
+     * 更新品类名称
+     * 根据ID更新品类名称
+     * @param categoryId 品类ID
+     * @param categoryName 品类名称
+     * @return
+     */
     @Override
     public ServerResponse setCategoryName(Integer categoryId,String categoryName){
         if (categoryId==null||StringUtils.isBlank(categoryName)){
@@ -59,6 +74,11 @@ public class CategoryServiceImpl implements ICategoryService {
     }
 
 
+    /**
+     * 得到当前分类的所有子类的品类信息
+     * @param categoryId
+     * @return
+     */
     @Override
     public ServerResponse<List<Category>> getChildrenParallelCategory(Integer categoryId){
         if (categoryId==null){
@@ -90,7 +110,13 @@ public class CategoryServiceImpl implements ICategoryService {
         return ServerResponse.createBySuccess(categoryIdList);
     }
 
-    //递归算法,算出子节点
+    /**
+     * 递归算法,得到更深层次的品类
+     * 在Set中添加对象,指定对象唯一的标准则需要重写equals和hashCode方法
+     * @param categorySet 带有唯一属性对象集合
+     * @param categoryId  品类ID
+     * @return 此品类ID下的所有子类品类和所属子类品类下的所有品类,以此类推
+     */
     private Set<Category> findChildrenCategory(Set<Category> categorySet,Integer categoryId){
         Category category = categoryMapper.selectByPrimaryKey(categoryId);
         if (category!=null){

@@ -37,6 +37,12 @@ public class ProductServiceImpl implements IProductService {
     @Autowired
     private ICategoryService iCategoryService;
 
+    /**
+     * 增加或更新商品
+     * 存在商品ID时更新商品,否则添加商品
+     * @param product
+     * @return
+     */
     @Override
     public ServerResponse saveOrUpdateProduct(Product product){
         if(product==null){
@@ -63,6 +69,12 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    /**
+     * 设置商品状态
+     * @param productId
+     * @param status
+     * @return
+     */
     @Override
     public ServerResponse setSaleStatus(Integer productId,Integer status){
         if (productId==null||status==null){
@@ -79,6 +91,11 @@ public class ProductServiceImpl implements IProductService {
     }
 
 
+    /**
+     * 后台得到商品详情
+     * @param productId
+     * @return
+     */
     @Override
     public ServerResponse<ProductDetailVo> manageProductDetail(Integer productId){
         if (productId==null){
@@ -93,6 +110,11 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
+    /**
+     * 根据Product组装ProductDetailVo
+     * @param product
+     * @return ProductDetailVo
+     */
     private ProductDetailVo assembleProductDetailVo(Product product){
         //-->装备vo层(value Object)
         ProductDetailVo productDetailVo = new ProductDetailVo();
@@ -120,6 +142,12 @@ public class ProductServiceImpl implements IProductService {
     }
 
 
+    /***
+     * 后台得到分页的商品列表
+     * @param pageNum
+     * @param pageSize
+     * @return 分页信息
+     */
     @Override
     public ServerResponse<PageInfo> getProductList(Integer pageNum,Integer pageSize){
         //利用PageHelper进行分页处理
@@ -138,7 +166,11 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(pageResult);
     }
 
-
+    /**
+     * 根据Product组装ProductListVo
+     * @param product
+     * @return
+     */
     private ProductListVo assembleProductListVo(Product product){
         ProductListVo productListVo = new ProductListVo();
         productListVo.setId(product.getId());
@@ -153,6 +185,14 @@ public class ProductServiceImpl implements IProductService {
     }
 
 
+    /**
+     * 后台搜索商品
+     * @param productName 商品名称
+     * @param productId   商品ID
+     * @param pageNum     页码
+     * @param pageSize    页容量
+     * @return
+     */
     @Override
     public ServerResponse<PageInfo> searchProduct(String productName,Integer productId,Integer pageNum,Integer pageSize){
         PageHelper.startPage(pageNum,pageSize);
@@ -170,7 +210,11 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(pageResult);
     }
 
-
+    /**
+     * 前台得到商品详情
+     * @param productId
+     * @return ProductDetailVo 经过再次封装的Product对象
+     */
     @Override
     public ServerResponse<ProductDetailVo> getProductDetail(Integer productId){
         if (productId==null){
@@ -188,11 +232,17 @@ public class ProductServiceImpl implements IProductService {
         return ServerResponse.createBySuccess(productDetailVo);
     }
 
-
-    @Override
     /**
-     * 根据关键字或者品类得到经过排序处理的分页的产品信息
+     * 前台根据关键字或者品类ID得到经过排序的分页商品列表
+     *
+     * @param keyWord
+     * @param categoryId
+     * @param pageNum
+     * @param pageSize
+     * @param orderBy
+     * @return ProductListVo 经过再次封装的Product对象集合
      */
+    @Override
     public ServerResponse<PageInfo> getProductByKeyWordCategory(String keyWord,Integer categoryId,Integer pageNum,Integer pageSize,String orderBy){
         if (StringUtils.isBlank(keyWord)&&categoryId == null){
             return ServerResponse.createByErrorCodeMessage(ResponseCode.ILLEGAL_ARGUMENT.getCode(),ResponseCode.ILLEGAL_ARGUMENT.getDesc());

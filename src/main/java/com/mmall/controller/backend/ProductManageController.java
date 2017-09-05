@@ -39,6 +39,12 @@ public class ProductManageController {
     @Autowired
     private IFileService iFileService;
 
+    /**
+     * 后台增加商品
+     * @param session
+     * @param product
+     * @return
+     */
     @RequestMapping("save.do")
     @ResponseBody
     public ServerResponse productSave(HttpSession session, Product product){
@@ -54,6 +60,13 @@ public class ProductManageController {
 
     }
 
+    /**
+     * 后台重新设置商品状态
+     * @param session
+     * @param productId
+     * @param status
+     * @return
+     */
     @RequestMapping("set_sale_status.do")
     @ResponseBody
     public ServerResponse setSaleStatus(HttpSession session, Integer productId,Integer status){
@@ -87,6 +100,13 @@ public class ProductManageController {
     }
 
 
+    /**
+     * 后台获取商品列表
+     * @param session
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("list.do")
     @ResponseBody
     public ServerResponse getList(HttpSession session, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum, @RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
@@ -101,6 +121,15 @@ public class ProductManageController {
     }
 
 
+    /**
+     * 后台搜索商品
+     * @param session
+     * @param productName
+     * @param productId
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("search.do")
     @ResponseBody
     public ServerResponse productSearch(HttpSession session,String productName,Integer productId, @RequestParam(value = "pageNum",defaultValue = "1") int pageNum, @RequestParam(value = "pageSize",defaultValue = "10") int pageSize){
